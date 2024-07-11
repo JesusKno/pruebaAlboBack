@@ -56,9 +56,30 @@ const deleteTask = async(req, res) => {
     })
 }
 
+
+
+const updateTaskStatus = async(req, res) => {
+    
+    const taskId = req.params.id
+
+    await taskModel.updateOne({_id: taskId}, {$set: {taskComplete: true}}).then(
+        data => {
+            console.log(data);
+            if(!data){
+                res.status(400).send({Message: "Task not found"});
+            }else{
+                res.status(201).send({Message: "Task update succesfully"})
+            }
+        }
+    ).catch(err => {
+        res.status(500).send({Message: err})
+    })
+}
+
 export {
     getAllTasks,
     saveNewTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    updateTaskStatus
 }
