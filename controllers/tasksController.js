@@ -2,21 +2,30 @@ import taskModel from '../models/task.js'
 
 const getAllTasks = async( req, res ) =>{
 
-    const taskList = await taskModel.find()
-    res.status(200).json(taskList)
+    try {
+        const taskList = await taskModel.find()
+        res.status(200).json(taskList)
+    } catch (error) {
+        res.status(500).send({Message: "Server Error"})
+    }
 }
 
 const saveNewTask = async(req, res) =>{
 
-    console.log(req.body)
-
     const taskData = taskModel(req.body)
 
-    await taskData.save()
-
-    console.log(taskData)
-
-    res.send({Message: "Task Saved"})
+    await taskData.save().then(
+        data => {
+            console.log(data);
+            if(!data){
+                res.status(400).send({Message: "Task not saved"});
+            }else{
+                res.status(201).send({Message: "Task Saved"})
+            }
+        }
+    ).catch(err => {
+        res.status(500).send({Message: err})
+    })
 
 }
 
@@ -30,7 +39,7 @@ const updateTask = async(req, res) => {
             if(!data){
                 res.status(400).send({Message: "Task not found"});
             }else{
-                res.status(201).send({Message: "Task update succesfully"})
+                res.status(200).send({Message: "Task update succesfully"})
             }
         }
     ).catch(err => {
@@ -68,7 +77,7 @@ const updateTaskStatus = async(req, res) => {
             if(!data){
                 res.status(400).send({Message: "Task not found"});
             }else{
-                res.status(201).send({Message: "Task update succesfully"})
+                res.status(200).send({Message: "Task update succesfully"})
             }
         }
     ).catch(err => {
