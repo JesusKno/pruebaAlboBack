@@ -1,10 +1,27 @@
 import taskModel from '../models/task.js'
 
 const getAllTasks = async( req, res ) =>{
-
     try {
-        const taskList = await taskModel.find()
-        res.status(200).json(taskList)
+        const taskData = await taskModel.find()
+        const taskListArray = []
+        taskData.forEach((data)=>{
+
+            const taskList = {
+                _id: data._id,
+                taskName: data.taskName,
+                taskDescription: data.taskDescription,
+                startDate: data.startDate.toISOString().split('T')[0],
+                endDate: data.endDate.toISOString().split('T')[0],
+                responsiblePersonEmail: data.responsiblePersonEmail,
+                taskComplete: data.taskComplete
+            }
+
+            taskListArray.push(taskList)
+            
+        })
+       
+        
+        res.status(200).json(taskListArray)
     } catch (error) {
         res.status(500).send({Message: "Server Error"})
     }
