@@ -33,7 +33,6 @@ const saveNewTask = async(req, res) =>{
 
     await taskData.save().then(
         data => {
-            console.log(data);
             if(!data){
                 res.status(400).send({Message: "Task not saved"});
             }else{
@@ -52,7 +51,6 @@ const updateTask = async(req, res) => {
 
     await taskModel.findByIdAndUpdate(taskId, req.body, {useFindAndModify: false}).then(
         data => {
-            console.log(data);
             if(!data){
                 res.status(400).send({Message: "Task not found"});
             }else{
@@ -70,7 +68,6 @@ const deleteTask = async(req, res) => {
 
     await taskModel.findByIdAndDelete(taskId).then(
         data => {
-            console.log(data);
             if(!data){
                 res.status(400).send({Message: "Task not found"});
             }else{
@@ -90,7 +87,6 @@ const updateTaskStatus = async(req, res) => {
 
     await taskModel.updateOne({_id: taskId}, {$set: {taskComplete: true}}).then(
         data => {
-            console.log(data);
             if(!data){
                 res.status(400).send({Message: "Task not found"});
             }else{
